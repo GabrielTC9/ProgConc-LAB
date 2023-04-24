@@ -1,5 +1,5 @@
 /*
-    Programa: Lab3-PiCalc.java
+    Programa: PiCalc.java
     Autor: Gabriel Trindade Corrêa
     DRE: 120019606
     Data: 24/04/2023
