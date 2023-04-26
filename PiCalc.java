@@ -7,70 +7,75 @@
 */
 
 class Calc extends Thread {
-    private int index;
+    private int id_thread;
     private int num_threads;
-    private int n;
-    private double pi_part;
+    private int num_terms;
+    private double sum_terms;
     
-    //--construtor
-    public Calc(int index, int num_threads, int n) { 
-        this.index = index;
+    //--Construtor  
+    public Calc(int id_thread, int num_threads, int num_terms) { 
+        this.id_thread = id_thread;
         this.num_threads = num_threads;
-        this.n = n; 
+        this.num_terms = num_terms; 
     }
 
-    public double getPiPart(){
-        return pi_part;
+    //--Retorna soma dos termos calculados pela thread
+    public double getSumTerms(){
+        return sum_terms;
     }
  
-    //--metodo executado pela thread
+    //--Método executado pela thread
     public void run() {
-        for(int i=index; i<n; i+=num_threads){
+        for(int i=id_thread; i<num_terms; i+=num_threads){
             double temp = Math.pow(-1,i) * 1/(2*i + 1);
-            //System.out.println("Thread "+ index + ": " + temp);
-            pi_part += temp;
+            //System.out.println("Thread "+ id_thread + ": " + temp);
+            sum_terms += temp;
         }
          
     }
 }
 
 public class PiCalc {
-    static int n ;//= 0;
-    static int num_threads ;//= 0;
+    static int num_terms ;
+    static int num_threads ;
 
     public static void main (String[] args) {
+        
+        //--Verifica se usuário inseriu número de termos e de threads
         if(args.length!=2){
             System.out.println("Command Error: java PiCalc <number of pi terms> <number of threads>");
             System.exit(1);
         }
-        
-        n = Integer.parseInt(args[0]);
+        num_terms = Integer.parseInt(args[0]);
         num_threads = Integer.parseInt(args[1]);
         
-        //--reserva espaço para um vetor de threads
+        //--Reserva espaço para vetor de threads
         Thread[] threads = new Thread[num_threads];
         double pi = 0;
 
-        //--PASSO 2: cria a classe Calc que estende Thread
+        //--Cria a classe Calc que estende Thread
         for (int i=0; i<threads.length; i++) {
-            threads[i] = new Calc(i,num_threads,n);
+            threads[i] = new Calc(i,num_threads,num_terms);
         }
 
-        //--PASSO 3: iniciar a thread
+        //--Inicia as threads
         for (int i=0; i<threads.length; i++) {
             threads[i].start();
         }
 
-        //--PASSO 4: esperar pelo termino das threads
+        //--Espera pelo término das threads
         for (int i=0; i<threads.length; i++) {
                 try { threads[i].join(); } 
                 catch (InterruptedException e) { return; }
 
-                //Realiza o calculo dos valores
-                double pi_part = 4 * ((Calc) threads[i]).getPiPart();
-                pi += pi_part;
+                //--Realiza o cálculo dos valores
+                double sum_terms = 4 * ((Calc) threads[i]).getSumTerms();
+                pi += sum_terms;
         } 
 
-        System.out.println("End value: " + pi); 
+        //--Imprime resultado encontrado de pi
+        System.out.println("Valor encontrado de pi: " + pi);
+        System.out.println("Valor da constante Math.PI: " + Math.PI);
+        System.out.println("Erro absoluto: " + (Math.PI - pi)); 
     }
 }
