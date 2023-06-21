@@ -1,7 +1,14 @@
+#   Programa: picalculator.py
+#   Autor: Gabriel Trindade Corrêa
+#   DRE: 120019606
+#   Data: 20/06/2023
+#   Descrição: Este programa implementa o cálculo de pi com threads, de acordo com a fórmula da atividade 5 do Lab7.
+
 from threading import Thread
 import math
 import time
 
+#   Classe das threads
 class PiTermCalculatorThread (Thread):
 
     def __init__(self, id, numTerms, numThreads):
@@ -18,7 +25,8 @@ class PiTermCalculatorThread (Thread):
     
     def getSumTerms(self):
         return self.sumTerms*4
-    
+
+#   Fluxo principal   
 if __name__ == '__main__':
     NUMTERMS = 1000
     NUMTHREADS = 4
